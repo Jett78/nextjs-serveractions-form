@@ -1,5 +1,5 @@
-import { revalidateTag } from "next/cache";
 import React from "react";
+import { addProductToDatabase } from "./actions/ServerActions";
 
 const page = async () => {
   const res = await fetch(
@@ -13,21 +13,7 @@ const page = async () => {
   const products = await res.json();
   console.log(products)
 
-  const addProductToDatabase = async(e) => {
-      "use server"
-      const product = e.get("product")?.toString();
-      const price = e.get("price")?.toString();
-
-      if(!product || !price) return ;
-      await fetch("https://665951b0de346625136bf3a7.mockapi.io/products",{
-        method:"POST",
-        body:JSON.stringify({product,price}),
-        headers:{
-          "Content-type":"application/json",
-        },
-      })
-revalidateTag("products")
-  }
+ 
   return (
     <div>
       <h2 className="text-4xl font-bold text-center mt-10">
