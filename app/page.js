@@ -1,23 +1,22 @@
 import React from "react";
 import { addProductToDatabase } from "./actions/ServerActions";
 
+
 const page = async () => {
   const res = await fetch(
     "https://665951b0de346625136bf3a7.mockapi.io/products",{
-      cache:"no-cache",
+      cache:"no-cache",  //quickly renders in UI when API data is updated
       next:{
-        tags:["products"]
+        tags:["products"]  //to display in the UI
       }
     }
   );
   const products = await res.json();
-  console.log(products)
-
  
   return (
     <div>
       <h2 className="text-4xl font-bold text-center mt-10">
-        Product Warehouse{" "}
+        Product Warehouse
       </h2>
       <form action={addProductToDatabase} className="grid gap-2 items-center justify-center mt-4  ">
         <input

@@ -15,5 +15,5 @@ export const addProductToDatabase = async(e) => {
         "Content-type":"application/json",
       },
     })
-revalidateTag("products")
+revalidateTag("products") //to display POST data in the UI
 }
