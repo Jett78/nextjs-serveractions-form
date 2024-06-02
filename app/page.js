@@ -1,22 +1,47 @@
+import { revalidateTag } from "next/cache";
 import React from "react";
 
 const page = async () => {
   const res = await fetch(
-    "https://665951b0de346625136bf3a7.mockapi.io/products"
+    "https://665951b0de346625136bf3a7.mockapi.io/products",{
+      cache:"no-cache",
+      next:{
+        tags:["products"]
+      }
+    }
   );
   const products = await res.json();
+  console.log(products)
+
+  const addProductToDatabase = async(e) => {
+      "use server"
+      const product = e.get("product")?.toString();
+      const price = e.get("price")?.toString();
+
+      if(!product || !price) return ;
+      await fetch("https://665951b0de346625136bf3a7.mockapi.io/products",{
+        method:"POST",
+        body:JSON.stringify({product,price}),
+        headers:{
+          "Content-type":"application/json",
+        },
+      })
+revalidateTag("products")
+  }
   return (
     <div>
       <h2 className="text-4xl font-bold text-center mt-10">
         Product Warehouse{" "}
       </h2>
-      <form action="" className="grid gap-2 items-center justify-center mt-4  ">
+      <form action={addProductToDatabase} className="grid gap-2 items-center justify-center mt-4  ">
         <input
+        name="product"
           type="text"
           placeholder="Enter product name"
           className="border p-2 w-[30em] outline-none"
         />
         <input
+        name="price"
           type="text"
           placeholder="Enter product price "
           className="border p-2 w-[30em] outline-none"
